@@ -1,21 +1,31 @@
-# artdmx-bridge32
-
 <p align="center">
   <img src="docs/artdmx-bridge32-logo.png" alt="artdmx-bridge32 logo" width="360">
 </p>
 
+# artdmx-bridge32
+
+<p align="center"><strong>Art-Net to DMX512 Gateway for ESP32</strong></p>
+
 <p align="center">
-![Firmware](https://img.shields.io/badge/firmware-2.3.0--web--dmx-blue)
-![Platform](https://img.shields.io/badge/platform-ESP32%20%7C%20Arduino-informational)
-![DMX](https://img.shields.io/badge/protocol-Art--Net%20%2B%20DMX512-success)
-![License](https://img.shields.io/badge/license-GPLv3-blue)
+  <a href="#"><img src="https://img.shields.io/badge/firmware-2.3.0--web--dmx-blue" alt="Firmware 2.3.0-web-dmx"></a>
+  <a href="#"><img src="https://img.shields.io/badge/platform-ESP32%20%7C%20Arduino-informational" alt="Platform ESP32 Arduino"></a>
+  <a href="#"><img src="https://img.shields.io/badge/protocol-Art--Net%20%2B%20DMX512-success" alt="Art-Net + DMX512"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPLv3-blue" alt="License GPLv3"></a>
 </p>
+
+<p align="center">
+  <a href="manual.pdf">Manual (EN)</a>
+  &nbsp;·&nbsp;
+  <a href="manual-de.pdf">Handbuch (DE)</a>
+</p>
+
+---
 
 ESP32 Art-Net to DMX512 bridge for Arduino IDE projects. It receives DMX data over WiFi, drives one or two RS-485 DMX outputs, and can optionally use a wired DMX input as fallback when Art-Net traffic is idle.
 
 Runtime settings are stored in NVS flash and can be edited through the built-in web interface.
 
-A printable **user manual** is included: [manual.pdf](manual.pdf) (source: `docs/manual.html`). Regenerate with `docs/generate_manual_pdf.ps1` (requires Google Chrome). Close any open `manual.pdf` before regenerating.
+Sources: `docs/manual.html` (English) · `docs/manual-de.html` (German)
 
 > [!NOTE]
 > This project is inspired by [Connotron DMX Gateway](https://github.com/chaosloth/Connotron_DMX_Gateway) by [Christopher Connolly](https://github.com/chaosloth). `artdmx-bridge32` is a separate rewrite with NVS-backed configuration, a modular codebase, dual DMX output support, traffic indicators, a web dashboard, DMX test mode, configuration backup/restore, and a dual-core FreeRTOS task layout.
@@ -742,12 +752,12 @@ artdmx-bridge32/
 ├── logo_data.h              # Embedded PNG for web header (served at /artdmx-bridge32-logo.png)
 ├── LICENSE                  # GNU General Public License v3 (full text)
 ├── license.h                # Copyright and SPDX license identifiers
-├── manual.pdf               # User manual (PDF)
+├── manual.pdf               # User manual (PDF, English)
+├── manual-de.pdf            # User manual (PDF, German)
 ├── docs/
-│   ├── manual.html          # User manual source (print/PDF)
+│   ├── manual.html          # User manual source (English)
+│   ├── manual-de.html       # User manual source (German)
 │   ├── artdmx-bridge32-logo.png # Logo on manual cover (from logo_data.h)
-│   ├── extract_logo.ps1     # Regenerate manual logo PNG
-│   └── generate_manual_pdf.ps1
 ├── uart.c.txt               # Reference patch notes for esp_dmx
 ├── .gitignore
 ├── .gitattributes
