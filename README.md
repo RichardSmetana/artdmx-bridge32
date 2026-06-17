@@ -1,9 +1,15 @@
 # artdmx-bridge32
 
+<p align="center">
+  <img src="docs/artdmx-bridge32-logo.png" alt="artdmx-bridge32 logo" width="360">
+</p>
+
+<p align="center">
 ![Firmware](https://img.shields.io/badge/firmware-2.3.0--web--dmx-blue)
 ![Platform](https://img.shields.io/badge/platform-ESP32%20%7C%20Arduino-informational)
 ![DMX](https://img.shields.io/badge/protocol-Art--Net%20%2B%20DMX512-success)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
+</p>
 
 ESP32 Art-Net to DMX512 bridge for Arduino IDE projects. It receives DMX data over WiFi, drives one or two RS-485 DMX outputs, and can optionally use a wired DMX input as fallback when Art-Net traffic is idle.
 
