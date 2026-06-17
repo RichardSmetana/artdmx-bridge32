@@ -7,6 +7,8 @@ $chrome = "${env:ProgramFiles}\Google\Chrome\Application\chrome.exe"
 if (-not (Test-Path $html)) {
     throw "Missing $html"
 }
+
+& (Join-Path $PSScriptRoot "extract_logo.ps1") | Out-Null
 if (-not (Test-Path $chrome)) {
     throw "Chrome not found at $chrome"
 }

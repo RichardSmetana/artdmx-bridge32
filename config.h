@@ -60,7 +60,7 @@ extern const int DMX_OUT_TX_PIN;
 extern const int DMX_OUT_RX_PIN;
 extern const int DMX_OUT_EN_PIN;
 
-// DMX2 output / DMX1 input share DMX_NUM_2 (mode selected at boot)
+// Port 2 GPIOs: DMX2 output (pin switching on DMX_NUM_1) or DMX1 input (DMX_NUM_2)
 extern const int DMX2_OUT_TX_PIN;
 extern const int DMX2_OUT_RX_PIN;
 extern const int DMX2_OUT_EN_PIN;

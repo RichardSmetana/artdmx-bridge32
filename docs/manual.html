@@ -48,9 +48,17 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       page-break-after: always;
       text-align: center;
-      padding-top: 30mm;
+      padding-top: 20mm;
+    }
+    .cover-logo {
+      display: block;
+      width: 90mm;
+      max-width: 85%;
+      height: auto;
+      margin: 0 auto 10mm;
     }
     .cover .product { font-size: 32pt; font-weight: 700; color: #0f2d52; }
     .cover .subtitle { font-size: 14pt; color: #475569; margin: 6mm 0 12mm; }
@@ -90,6 +98,7 @@
 <body>
 
 <div class="cover">
+  <img class="cover-logo" src="artdmx-bridge32-logo.png" alt="artdmx-bridge32 logo">
   <div class="product">artdmx-bridge32</div>
   <div class="subtitle">Art-Net to DMX512 Gateway</div>
   <div class="meta">

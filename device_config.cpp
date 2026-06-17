@@ -353,7 +353,8 @@ String exportConfigText() {
   out += "# License: GNU GPL v3 or later — full text in LICENSE file\n";
   out += "# Editable text format. Lines starting with # are comments.\n";
   out += "# Syntax: key=value  |  booleans: true/false  |  quote values with spaces\n";
-  out += "# All keys below are required when uploading.\n\n";
+  out += "# Required on upload: all setting keys below (wifi_*, hostname, etc.).\n";
+  out += "# Optional metadata: format_version, device, firmware.\n\n";
   out += "format_version=1\n";
   out += "device=";
   out += DEVICE_NAME;
@@ -499,6 +500,10 @@ static bool validateImportedConfig(const DeviceConfig &parsed, String &error) {
   }
   if (parsed.artnetDebugChEnd < 1 || parsed.artnetDebugChEnd > 512) {
     error = "artnet_debug_ch_end out of range (1-512)";
+    return false;
+  }
+  if (parsed.enableDmxInput && parsed.enableDmx2Output) {
+    error = "enable_dmx_input and enable_dmx2_output cannot both be true";
     return false;
   }
   return true;

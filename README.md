@@ -9,7 +9,7 @@ ESP32 Art-Net to DMX512 bridge for Arduino IDE projects. It receives DMX data ov
 
 Runtime settings are stored in NVS flash and can be edited through the built-in web interface.
 
-A printable **user manual** is included: [manual.pdf](manual.pdf) (source: `docs/manual.html`). Regenerate with `docs/generate_manual_pdf.ps1` (requires Google Chrome).
+A printable **user manual** is included: [manual.pdf](manual.pdf) (source: `docs/manual.html`). Regenerate with `docs/generate_manual_pdf.ps1` (requires Google Chrome). Close any open `manual.pdf` before regenerating.
 
 > [!NOTE]
 > This project is inspired by [Connotron DMX Gateway](https://github.com/chaosloth/Connotron_DMX_Gateway) by [Christopher Connolly](https://github.com/chaosloth). `artdmx-bridge32` is a separate rewrite with NVS-backed configuration, a modular codebase, dual DMX output support, traffic indicators, a web dashboard, DMX test mode, configuration backup/restore, and a dual-core FreeRTOS task layout.
@@ -157,7 +157,7 @@ Recommended Arduino board settings:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-user/artdmx-bridge32.git
+git clone https://github.com/RichardSmetana/artdmx-bridge32.git
 cd artdmx-bridge32
 ```
 
@@ -212,7 +212,7 @@ http://artdmx-bridge32.local
 http://<device-ip>
 ```
 
-If WiFi is unavailable for **5 seconds**, the device starts a setup access point. Connect to `<hostname>-setup`, open the AP IP in a browser (shown in the Serial log and dashboard banner), and set WiFi credentials on the **Configuration** page. While connected, link health is rechecked every **2 seconds** (valid IP + AP association). If the signal or link is lost, the device reconnects automatically and the status LED single-blinks until connected again or AP mode starts.
+If WiFi is unavailable for **5 seconds**, the device starts a setup access point. Connect to `<hostname>-setup`, open the AP IP in a browser (shown in the Serial log and dashboard banner), and set WiFi credentials on the **Configuration** page. The setup AP has **no Wi-Fi password** by design — set a **Web password** in Configuration if you need to protect the UI on untrusted networks. While connected to your network, link health is rechecked every **2 seconds** (valid IP + AP association). If the signal or link is lost, the device reconnects automatically and the status LED single-blinks until connected again or AP mode starts.
 
 | Field | Default |
 | --- | --- |
@@ -385,7 +385,7 @@ On the Configuration page, **Backup / restore** lets you export and import all p
 
 **Upload:** paste or choose a file, then **Upload** or **Upload and Reboot**. Use `POST /api/config/upload` with `Content-Type: text/plain`.
 
-Format: `key=value` lines, `#` comments, booleans as `true`/`false`. Quote values that contain spaces: `wifi_pass="my secret"`. All keys in the downloaded file are required on upload.
+Format: `key=value` lines, `#` comments, booleans as `true`/`false`. Quote values that contain spaces: `wifi_pass="my secret"`. All **setting** keys in the downloaded file are required on upload; optional metadata keys are `format_version`, `device`, and `firmware`.
 
 Upload is validated before any change is applied. Syntax errors, unknown keys, duplicate keys, missing keys, or out-of-range values return an error and **leave existing settings unchanged**.
 
@@ -733,16 +733,18 @@ artdmx-bridge32/
 ├── artnet_handler.*         # Art-Net callback and init
 ├── led.*                    # Traffic LEDs, WiFi status LED (PWM), activity tracking
 ├── tasks.*                  # networkTask, dmxTask, statusLedTask
-├── logo_data.h              # Embedded PNG for web header
-├── artdmx-bridge32-logo.png # Source logo image
+├── logo_data.h              # Embedded PNG for web header (served at /artdmx-bridge32-logo.png)
 ├── LICENSE                  # GNU General Public License v3 (full text)
 ├── license.h                # Copyright and SPDX license identifiers
 ├── manual.pdf               # User manual (PDF)
 ├── docs/
 │   ├── manual.html          # User manual source (print/PDF)
+│   ├── artdmx-bridge32-logo.png # Logo on manual cover (from logo_data.h)
+│   ├── extract_logo.ps1     # Regenerate manual logo PNG
 │   └── generate_manual_pdf.ps1
 ├── uart.c.txt               # Reference patch notes for esp_dmx
 ├── .gitignore
+├── .gitattributes
 └── README.md
 ```
 
