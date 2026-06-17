@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>artdmx-bridge32 Benutzerhandbuch</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm 16mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3, h4 { color: #0f2d52; page-break-after: avoid; }
+    h1 { font-size: 26pt; margin: 0 0 8mm; }
+    h2 {
+      font-size: 15pt;
+      border-bottom: 1.5pt solid #2563eb;
+      padding-bottom: 2mm;
+      margin: 10mm 0 4mm;
+    }
+    h3 { font-size: 12pt; margin: 6mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 0 0 4mm 5mm; padding-left: 5mm; }
+    li { margin-bottom: 1.5mm; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3mm 0 5mm;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 0.5pt solid #94a3b8;
+      padding: 2mm 2.5mm;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: #e8eef7; font-weight: 600; }
+    .cover {
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      page-break-after: always;
+      text-align: center;
+      padding-top: 20mm;
+    }
+    .cover-logo {
+      display: block;
+      width: 90mm;
+      max-width: 85%;
+      height: auto;
+      margin: 0 auto 10mm;
+    }
+    .cover .product { font-size: 32pt; font-weight: 700; color: #0f2d52; }
+    .cover .subtitle { font-size: 14pt; color: #475569; margin: 6mm 0 12mm; }
+    .cover .meta { font-size: 11pt; color: #64748b; line-height: 1.8; }
+    .toc { page-break-after: always; }
+    .toc ol { font-size: 11pt; line-height: 1.7; }
+    .toc a { color: inherit; text-decoration: none; }
+    .section { page-break-before: auto; }
+    .major { page-break-before: always; }
+    .note, .warning, .important {
+      border-left: 3pt solid;
+      padding: 3mm 4mm;
+      margin: 4mm 0;
+      page-break-inside: avoid;
+    }
+    .note { background: #f0f9ff; border-color: #0284c7; }
+    .warning { background: #fff7ed; border-color: #ea580c; }
+    .important { background: #fef2f2; border-color: #dc2626; }
+    .label { font-weight: 600; color: #334155; }
+    code, .mono {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9pt;
+      background: #f1f5f9;
+      padding: 0.3mm 1mm;
+    }
+    .footer-line {
+      margin-top: 8mm;
+      padding-top: 3mm;
+      border-top: 0.5pt solid #cbd5e1;
+      font-size: 8.5pt;
+      color: #64748b;
+      text-align: center;
+    }
+    .figure { font-style: italic; color: #475569; font-size: 9pt; margin-top: 1mm; }
+  </style>
+</head>
+<body>
+
+<div class="cover">
+  <img class="cover-logo" src="artdmx-bridge32-logo.png" alt="artdmx-bridge32 Logo">
+  <div class="product">artdmx-bridge32</div>
+  <div class="subtitle">Art-Net-zu-DMX512-Gateway</div>
+  <div class="meta">
+    <strong>Benutzerhandbuch</strong><br>
+    Firmware-Version 2.3.0-web-dmx<br>
+    Dokumentrevision 1.0 — Juni 2026<br><br>
+    Copyright © 2026 Richard Smetana<br>
+    Lizenziert unter <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL v3 oder später</a>
+  </div>
+</div>
+
+<div class="toc major">
+  <h2>Inhaltsverzeichnis</h2>
+  <ol>
+    <li><a href="#s1">Sicherheit und bestimmungsgemäße Verwendung</a></li>
+    <li><a href="#s2">Produktübersicht</a></li>
+    <li><a href="#s3">Anforderungen und Spezifikationen</a></li>
+    <li><a href="#s4">Hardwareinstallation</a></li>
+    <li><a href="#s5">Ersteinrichtung</a></li>
+    <li><a href="#s6">Netzwerkzugriff</a></li>
+    <li><a href="#s7">Weboberfläche</a></li>
+    <li><a href="#s8">Konfigurationsreferenz</a></li>
+    <li><a href="#s9">DMX-Testmodus</a></li>
+    <li><a href="#s10">Konfigurationssicherung und Wiederherstellung</a></li>
+    <li><a href="#s11">Kanalfilter (Port 2)</a></li>
+    <li><a href="#s12">LED-Anzeigen</a></li>
+    <li><a href="#s13">Art-Net-Betrieb</a></li>
+    <li><a href="#s14">Firmware-Updates (OTA)</a></li>
+    <li><a href="#s15">Werkseinstellungen</a></li>
+    <li><a href="#s16">Serieller Monitor und Protokollierung</a></li>
+    <li><a href="#s17">Fehlersuche</a></li>
+    <li><a href="#s18">Technische Support-Informationen</a></li>
+  </ol>
+</div>
+
+<div class="section major" id="s1">
+  <h2>1. Sicherheit und bestimmungsgemäße Verwendung</h2>
+  <div class="important">
+    <strong>Wichtig.</strong> Dieses Gerät wird mit Niederspannungs-Steuerleitungen verbunden (DMX512, RS-485, GPIO). Es ersetzt keine qualifizierte Elektroinstallation für netzbetriebene Scheinwerfer. Installation und Betrieb müssen gemäß den lokalen Vorschriften erfolgen.
+  </div>
+  <p>artdmx-bridge32 wandelt über WiFi empfangene <strong>Art-Net</strong>-Lichtsteuerdaten in <strong>DMX512</strong>-Ausgabe für professionelle Lichtsteuerung um. Es ist für Festinstallationen, mobile Setups und Prüfaufbauten vorgesehen, bei denen Art-Net die primäre Steuerquelle ist.</p>
+  <ul>
+    <li>Nur mit der empfohlenen ESP32-Versorgungsspannung und passend ausgelegten RS-485-Transceivern betreiben.</li>
+    <li>Das Gerät nicht Feuchtigkeit aussetzen, außer das Gehäuse ist für die jeweilige Umgebung geeignet.</li>
+    <li>Geschirmte oder verdrillte DMX-Leitungen verwenden, die für RS-485 geeignet sind.</li>
+    <li>Lange DMX-Leitungen gemäß den Vorgaben des Geräteherstellers terminieren.</li>
+  </ul>
+</div>
+
+<div class="section major" id="s2">
+  <h2>2. Produktübersicht</h2>
+  <p>artdmx-bridge32 ist ein ESP32-basiertes Gateway, das:</p>
+  <ul>
+    <li><strong>Art-Net</strong>-Universen über WiFi empfängt</li>
+    <li><strong>DMX1</strong> am primären RS-485-Port ausgibt (immer aktiv)</li>
+    <li>optional <strong>DMX2</strong> an einem zweiten RS-485-Port mit Kanalfilter ausgibt</li>
+    <li>optional einen <strong>kabelgebundenen DMX-Eingang</strong> an Port 2 als Fallback verwendet, wenn Art-Net inaktiv ist</li>
+    <li>ein integriertes <strong>Web-Dashboard</strong>, <strong>Konfigurationsseiten</strong> und <strong>DMX-Testwerkzeuge</strong> bereitstellt</li>
+    <li>Einstellungen im <strong>nichtflüchtigen Flashspeicher (NVS)</strong> speichert</li>
+  </ul>
+  <div class="note">
+    <strong>Hinweis.</strong> Port 2 wird entweder als <strong>DMX2-Ausgang</strong> oder als <strong>kabelgebundener DMX1-Eingang</strong> verwendet, niemals beides gleichzeitig. Eine Änderung dieses Modus erfordert einen Neustart.
+  </div>
+  <h3>Hauptfunktionen</h3>
+  <table>
+    <tr><th>Funktion</th><th>Beschreibung</th></tr>
+    <tr><td>Web-Dashboard</td><td>Live-Status, Traffic-Anzeigen, laufendes Log, Setup- und Testmodus-Banner</td></tr>
+    <tr><td>Web-Konfiguration</td><td>WiFi, Hostname, Art-Net, DMX-Timing, Debug-Logging, Werkseinstellungen</td></tr>
+    <tr><td>Konfigurationssicherung</td><td>Herunterladen/Hochladen editierbarer <code>artdmx-bridge32.conf</code>-Textdateien</td></tr>
+    <tr><td>DMX-Testseite</td><td>16 manuelle Slider; Art-Net wird ignoriert, solange der Testmodus aktiv ist</td></tr>
+    <tr><td>mDNS</td><td>Zugriff über <code>http://&lt;hostname&gt;.local</code></td></tr>
+    <tr><td>Setup-Access-Point</td><td>Automatischer AP, wenn die WiFi-Verbindung innerhalb von 5 Sekunden fehlschlägt</td></tr>
+    <tr><td>ArduinoOTA</td><td>Drahtlose Firmware-Updates aus der Arduino IDE</td></tr>
+  </table>
+</div>
+
+<div class="section major" id="s3">
+  <h2>3. Anforderungen und Spezifikationen</h2>
+  <h3>Hardwareanforderungen</h3>
+  <table>
+    <tr><th>Komponente</th><th>Spezifikation</th></tr>
+    <tr><td>Controller</td><td>ESP32-Modul (z. B. ESP32-WROOM-32, ESP32-WROOM-DA)</td></tr>
+    <tr><td>RS-485</td><td>MAX485 oder kompatibel — einer für DMX1, optional ein zweiter für Port 2</td></tr>
+    <tr><td>LEDs (optional)</td><td>GPIO 13, 14, 22 mit Vorwiderständen (330 Ω–1 kΩ)</td></tr>
+    <tr><td>Reset-Eingang (optional)</td><td>GPIO 15 nach GND, 3 s halten für Werkseinstellungen</td></tr>
+    <tr><td>Stromversorgung</td><td>Stabile 3,3 V / 5 V gemäß Spezifikation deines ESP32-Boards</td></tr>
+  </table>
+  <h3>Software- / Netzwerkanforderungen</h3>
+  <table>
+    <tr><th>Element</th><th>Anforderung</th></tr>
+    <tr><td>WiFi-Netzwerk</td><td>2,4 GHz WPA/WPA2 (oder offener AP für die Ersteinrichtung)</td></tr>
+    <tr><td>Lichtsoftware</td><td>Art-Net-Sender (Universum muss zur Gerätekonfiguration passen)</td></tr>
+    <tr><td>Webbrowser</td><td>Moderner Browser für Dashboard und Konfiguration</td></tr>
+    <tr><td>Arduino IDE (OTA)</td><td>Für drahtlose Firmware-Updates; ESP32-Boardpaket 2.x oder 3.x</td></tr>
+  </table>
+  <h3>Standard-Betriebsparameter</h3>
+  <table>
+    <tr><th>Parameter</th><th>Werkseinstellung</th></tr>
+    <tr><td>Hostname</td><td><code>artdmx-bridge32</code></td></tr>
+    <tr><td>Art-Net-Universum</td><td>0</td></tr>
+    <tr><td>Art-Net-Timeout</td><td>15000 ms</td></tr>
+    <tr><td>DMX-Refresh-Intervall</td><td>30 ms</td></tr>
+    <tr><td>DMX-Paketgröße</td><td>Volle 512-Kanal-Pakete aktiviert</td></tr>
+    <tr><td>DMX2-Ausgang</td><td>Deaktiviert</td></tr>
+    <tr><td>Kabelgebundener DMX1-Eingang</td><td>Deaktiviert</td></tr>
+    <tr><td>Kanalfilter</td><td>Kanäle 1–512</td></tr>
+    <tr><td>Serieller Monitor</td><td>115200 Baud</td></tr>
+  </table>
+</div>
+
+<div class="section major" id="s4">
+  <h2>4. Hardwareinstallation</h2>
+  <h3>4.1 DMX1-Ausgang (primärer Port)</h3>
+  <table>
+    <tr><th>ESP32 GPIO</th><th>MAX485-Pin</th><th>Funktion</th></tr>
+    <tr><td>GPIO 17</td><td>DI</td><td>UART TX → DMX-Daten</td></tr>
+    <tr><td>GPIO 16</td><td>RO</td><td>UART RX</td></tr>
+    <tr><td>GPIO 4</td><td>DE + /RE</td><td>Treiberfreigabe (DE und /RE gemeinsam verbinden)</td></tr>
+    <tr><td>GND</td><td>GND</td><td>Gemeinsame Masse</td></tr>
+    <tr><td>—</td><td>A / B</td><td>DMX+ / DMX− zu den Geräten</td></tr>
+  </table>
+  <h3>4.2 Zweiter Port (DMX2-Ausgang oder DMX1-Eingang)</h3>
+  <table>
+    <tr><th>ESP32 GPIO</th><th>MAX485-Pin</th><th>Funktion</th></tr>
+    <tr><td>GPIO 19</td><td>DI</td><td>TX für DMX2-Ausgang</td></tr>
+    <tr><td>GPIO 18</td><td>RO</td><td>RX für kabelgebundenen DMX1-Eingang</td></tr>
+    <tr><td>GPIO 21</td><td>DE + /RE</td><td>Treiberfreigabe</td></tr>
+    <tr><td>GND</td><td>GND</td><td>Gemeinsame Masse</td></tr>
+    <tr><td>—</td><td>A / B</td><td>DMX+ / DMX− Leitung</td></tr>
+  </table>
+  <h3>4.3 Status- und Traffic-LEDs</h3>
+  <table>
+    <tr><th>GPIO</th><th>Funktion</th></tr>
+    <tr><td>GPIO 13</td><td>DMX1-Ausgangsaktivität (~150 ms Blitz pro Paket)</td></tr>
+    <tr><td>GPIO 14</td><td>DMX2-Ausgangs- oder DMX1-Eingangsaktivität</td></tr>
+    <tr><td>GPIO 22</td><td>WiFi- / OTA- / DMX-Teststatus (siehe Abschnitt 12)</td></tr>
+    <tr><td>GPIO 15</td><td>Werkseinstellungen — 3 Sekunden LOW halten</td></tr>
+  </table>
+</div>
+
+<div class="section major" id="s5">
+  <h2>5. Ersteinrichtung</h2>
+  <h3>5.1 Firmware flashen</h3>
+  <ol>
+    <li>ESP32-Boardpaket und die benötigten Bibliotheken installieren (<code>esp_dmx</code> 4.x, <code>ArtnetWifi</code>).</li>
+    <li><code>secrets.h.example</code> nach <code>secrets.h</code> kopieren und Standard-WiFi- sowie OTA-Zugangsdaten eintragen.</li>
+    <li><code>artdmx-bridge32.ino</code> in der Arduino IDE öffnen, Board und Port auswählen und hochladen.</li>
+    <li>Bei ESP32 Arduino Core 3.3.x kann ein <code>esp_dmx</code>-Bibliothekspatch für Kompilierung und kabelgebundenen DMX1-Eingang nötig sein — siehe Projekt-README.</li>
+  </ol>
+  <h3>5.2 Bootvorgang prüfen</h3>
+  <p>Seriellen Monitor mit <strong>115200 Baud</strong> öffnen. Ein erfolgreicher Start zeigt:</p>
+  <p class="mono">artdmx-bridge32 2.3.0-web-dmx starting...<br>Copyright (C) 2026 Richard Smetana<br>Licensed under GNU GPL v3 or later<br>DMX test mode off (default after boot)</p>
+  <h3>5.3 Mit WiFi verbinden</h3>
+  <p>Das Gerät verwendet WiFi-Zugangsdaten aus NVS (nach dem ersten Speichern über das Webinterface) oder beim ersten Start aus <code>secrets.h</code>. Wenn die Verbindung innerhalb von <strong>5 Sekunden</strong> fehlschlägt, startet ein Setup-Access-Point:</p>
+  <table>
+    <tr><th>Element</th><th>Wert</th></tr>
+    <tr><td>Setup-SSID</td><td><code>&lt;hostname&gt;-setup</code> (Standard: <code>artdmx-bridge32-setup</code>)</td></tr>
+    <tr><td>Weboberfläche</td><td>Gateway-IP aus dem seriellen Log und dem Dashboard-Banner</td></tr>
+  </table>
+  <p>Computer oder Telefon mit der Setup-SSID verbinden, Geräte-IP im Browser öffnen und auf der Seite <strong>Configuration</strong> die WiFi-Zugangsdaten eingeben. Bei Hinweis speichern und neu starten.</p>
+</div>
+
+<div class="section major" id="s6">
+  <h2>6. Netzwerkzugriff</h2>
+  <h3>6.1 Zugriffs-URLs</h3>
+  <table>
+    <tr><th>Methode</th><th>URL / Adresse</th><th>Verwendung</th></tr>
+    <tr><td>mDNS</td><td><code>http://&lt;hostname&gt;.local</code></td><td>Normalbetrieb im LAN (Standard: <code>http://artdmx-bridge32.local</code>)</td></tr>
+    <tr><td>IP-Adresse</td><td><code>http://&lt;device-ip&gt;</code></td><td>Wenn mDNS nicht verfügbar ist</td></tr>
+    <tr><td>Setup-AP</td><td>Gateway-IP aus dem seriellen Log</td><td>Wenn WiFi nicht konfiguriert oder nicht erreichbar ist</td></tr>
+  </table>
+  <h3>6.2 DHCP-Hostname</h3>
+  <p>Der konfigurierte <strong>Hostname</strong> wird als DHCP-Clientname an den Router gesendet. Er sollte in der Clientliste des Routers als <code>artdmx-bridge32</code> (oder dein eigener Name) erscheinen, nicht als <code>esp32-XXXXXX</code>. Hostname auf der Konfigurationsseite ändern und neu starten, wenn dein Router alte Leases zwischenspeichert.</p>
+  <h3>6.3 WiFi-Zuverlässigkeit</h3>
+  <p>Die Firmware verbindet automatisch neu, wenn die Verbindung verloren geht. Die Verbindung wird alle <strong>2 Sekunden</strong> geprüft (gültige IP und AP-Zuordnung). Die Status-LED blinkt einfach, während die Verbindung aufgebaut wird.</p>
+  <h3>6.4 Web-Login (optional)</h3>
+  <p>Wenn auf der Konfigurationsseite ein <strong>Web-Passwort</strong> gesetzt ist, benötigen alle Webseiten HTTP-Basic-Authentifizierung:</p>
+  <table>
+    <tr><th>Feld</th><th>Wert</th></tr>
+    <tr><td>Benutzername</td><td>Geräte-Hostname (Standard: <code>artdmx-bridge32</code>)</td></tr>
+    <tr><td>Passwort</td><td>Web-Passwort aus der Konfiguration</td></tr>
+  </table>
+  <p>Web-Passwort leer lassen, um die Authentifizierung zu deaktivieren. WiFi- und OTA-Passwörter sind getrennt.</p>
+</div>
+
+<div class="section major" id="s7">
+  <h2>7. Weboberfläche</h2>
+  <p>Alle Seiten enthalten eine Navigationsleiste (<strong>Dashboard · Config · DMX Test</strong>), Logo, Hostname-Kopfzeile und eine Fußzeile mit Copyright und GPL-Lizenzlink.</p>
+  <h3>7.1 Dashboard (<code>/</code>)</h3>
+  <p>Aktualisiert sich alle <strong>500 ms</strong>.</p>
+  <table>
+    <tr><th>Bereich</th><th>Beschreibung</th></tr>
+    <tr><td>Setup-Banner</td><td>Orangefarbenes Banner im AP-Modus mit Setup-SSID und URL</td></tr>
+    <tr><td>DMX-Test-Banner</td><td>Violettes Banner, wenn der DMX-Testmodus aktiv ist</td></tr>
+    <tr><td>DMX-Traffic</td><td>Webanzeigen für DMX1 out, DMX2 out, DMX1 in — etwa 2 s nach dem letzten Paket aktiv</td></tr>
+    <tr><td>Statusraster</td><td>Hostname, URL, IP, RSSI, Laufzeit, Heap, OTA, Art-Net, DMX-Test, Universum, Refresh, Port-Modi, Filter</td></tr>
+    <tr><td>Serielles Log</td><td>Letzte 32 Logzeilen; automatisches Scrollen, außer du scrollst nach oben</td></tr>
+  </table>
+  <h3>7.2 Konfiguration (<code>/config</code>)</h3>
+  <table>
+    <tr><th>Schaltfläche / Aktion</th><th>Beschreibung</th></tr>
+    <tr><td>Save</td><td>Einstellungen in den Flashspeicher schreiben</td></tr>
+    <tr><td>Save and Reboot</td><td>Einstellungen speichern und Gerät neu starten</td></tr>
+    <tr><td>Reboot</td><td>Neustart ohne Speichern von Änderungen</td></tr>
+    <tr><td>Download .conf</td><td>Alle Einstellungen als Textdatei exportieren</td></tr>
+    <tr><td>Upload / Upload and Reboot</td><td>Einstellungen aus Datei oder eingefügtem Text importieren</td></tr>
+    <tr><td>Factory reset</td><td>Alle Einstellungen löschen (Bestätigung erforderlich)</td></tr>
+  </table>
+  <h3>7.3 DMX Test (<code>/dmx-test</code>)</h3>
+  <p>Vollständige Dokumentation des DMX-Testmodus siehe Abschnitt 9.</p>
+</div>
+
+<div class="section major" id="s8">
+  <h2>8. Konfigurationsreferenz</h2>
+  <p>Einstellungen werden in NVS im Namespace <code>artdmx-bridge32</code> gespeichert. Nach dem ersten Speichern über das Webinterface bleiben Werte über Neustarts hinweg erhalten.</p>
+  <table>
+    <tr><th>Einstellung</th><th>Standard</th><th>Hinweise</th></tr>
+    <tr><td>WiFi SSID / Passwort</td><td>Aus secrets.h</td><td>Neustart nach Änderung empfohlen</td></tr>
+    <tr><td>Hostname</td><td>artdmx-bridge32</td><td>mDNS, OTA, DHCP-Name, Web-Benutzername (max. 31 Zeichen)</td></tr>
+    <tr><td>Web-Passwort</td><td>(leer)</td><td>Aktiviert HTTP-Basic-Auth, wenn gesetzt</td></tr>
+    <tr><td>OTA-Passwort</td><td>Aus secrets.h</td><td>Leer = OTA ohne Passwort</td></tr>
+    <tr><td>Art-Net-Universum</td><td>0</td><td>Muss mit der Lichtsoftware übereinstimmen</td></tr>
+    <tr><td>Art-Net-Timeout</td><td>15000 ms</td><td>Inaktive Zeit bis zum kabelgebundenen Eingangs-Fallback</td></tr>
+    <tr><td>DMX-Refresh-Intervall</td><td>30 ms</td><td>Wiederholrate für Hold-Dimmer</td></tr>
+    <tr><td>Volles 512-Kanal-Paket senden</td><td>Ein</td><td>Aus sendet nur den aktiven Kanalbereich</td></tr>
+    <tr><td>DMX2-Ausgang aktivieren</td><td>Aus</td><td>Gefilterter Art-Net-Spiegel auf Port 2; Neustart erforderlich</td></tr>
+    <tr><td>Kabelgebundenen DMX1-Eingang aktivieren</td><td>Aus</td><td>Deaktiviert DMX2; nutzt Port 2 als Eingang; Neustart erforderlich</td></tr>
+    <tr><td>Kanalfilter Start / Ende</td><td>1 / 512</td><td>Kanalbereich für Port 2 — siehe Abschnitt 11</td></tr>
+    <tr><td>Art-Net-Konsolenlog</td><td>Aus</td><td>Aus / passend / ignoriert / alle Universen</td></tr>
+    <tr><td>Debug-Log Kanal Start / Ende</td><td>1 / 4</td><td>Kanäle, die in Logzeilen angezeigt werden</td></tr>
+    <tr><td>Jedes N-te Paket loggen</td><td>1</td><td>Logmenge reduzieren (z. B. 10, 100)</td></tr>
+    <tr><td>Nur bei Wertänderung loggen</td><td>Aus</td><td>Identische aufeinanderfolgende Frames überspringen</td></tr>
+  </table>
+  <div class="warning">
+    <strong>Neustart erforderlich</strong>, damit Änderungen an WiFi, Hostname, Aktivierung von DMX2-Ausgang und kabelgebundenem DMX1-Eingangsmodus vollständig wirksam werden.
+  </div>
+</div>
+
+<div class="section major" id="s9">
+  <h2>9. DMX-Testmodus</h2>
+  <p>Die DMX-Testseite ermöglicht die manuelle Steuerung von DMX1 für Prüfaufbauten und Inbetriebnahme.</p>
+  <table>
+    <tr><th>Bedienelement</th><th>Beschreibung</th></tr>
+    <tr><td>DMX test mode</td><td>Wenn aktiviert, wird Art-Net ignoriert und die Sliderwerte steuern DMX1. Das Dashboard zeigt ein violettes Banner. Die GPIO-22-Status-LED atmet.</td></tr>
+    <tr><td>Send DMX only when slider moved</td><td>Standard EIN — DMX wird nur gesendet, wenn ein Slider bewegt wird. AUS = kontinuierlicher Refresh im konfigurierten Intervall.</td></tr>
+    <tr><td>Update sliders from Art-Net</td><td>Wenn der Testmodus AUS ist, werden eingehende Art-Net-Werte auf den Seitenslidern gespiegelt (nur Anzeige, 500-ms-Abfrage).</td></tr>
+    <tr><td>Start channel</td><td>Erster von 16 aufeinanderfolgenden Kanälen (1–497)</td></tr>
+    <tr><td>16 Slider</td><td>Bereich 0–255; werden beim Öffnen der Seite aus dem letzten Art-Net-Frame geladen</td></tr>
+    <tr><td>Pufferanzeigen</td><td>Ansicht des Sliderbereichs und vollständiger 512-Kanal-Puffer; Refresh-Schaltfläche aktualisiert den vollständigen Dump</td></tr>
+  </table>
+  <div class="note">
+    <strong>Nur zur Laufzeit.</strong> DMX-Testmodus und seine Checkboxen werden nach jedem Einschalten auf AUS zurückgesetzt. Sie werden nicht in NVS gespeichert.
+  </div>
+</div>
+
+<div class="section major" id="s10">
+  <h2>10. Konfigurationssicherung und Wiederherstellung</h2>
+  <p>Alle dauerhaften Einstellungen können als Klartextdatei <code>artdmx-bridge32.conf</code> exportiert und importiert werden.</p>
+  <h3>10.1 Download</h3>
+  <p>Konfigurationsseite → <strong>Download .conf</strong>, oder <code>GET /api/config/download</code>.</p>
+  <h3>10.2 Upload</h3>
+  <p>Datei auswählen oder Text einfügen → <strong>Upload</strong> oder <strong>Upload and Reboot</strong>.</p>
+  <h3>10.3 Dateiformat</h3>
+  <ul>
+    <li>Eine Einstellung pro Zeile: <code>key=value</code></li>
+    <li>Zeilen, die mit <code>#</code> beginnen, sind Kommentare</li>
+    <li>Boolesche Werte: <code>true</code> oder <code>false</code></li>
+    <li>Werte mit Leerzeichen in Anführungszeichen setzen: <code>wifi_pass="my secret"</code></li>
+    <li>Alle Schlüssel aus der heruntergeladenen Datei sind beim Upload erforderlich</li>
+  </ul>
+  <div class="important">
+    <strong>Validierung.</strong> Syntaxfehler, unbekannte Schlüssel, doppelte Schlüssel, fehlende Schlüssel oder ungültige Werte führen dazu, dass der Upload <strong>abgelehnt</strong> wird. Bestehende Einstellungen werden bei einem Fehler <strong>nicht geändert</strong>.
+  </div>
+</div>
+
+<div class="section major" id="s11">
+  <h2>11. Kanalfilter (Port 2)</h2>
+  <p>Der Kanalfilter gilt für den DMX2-Ausgang und den kabelgebundenen DMX1-Eingang an Port 2.</p>
+  <h3>DMX2-Ausgangsmodus</h3>
+  <ul>
+    <li>Nur Kanäle innerhalb des Filterbereichs werden auf DMX2 gesendet (andere werden in diesem Paket auf null gesetzt).</li>
+    <li>DMX2 sendet <strong>nur, wenn sich ein Wert im Filterbereich ändert</strong> — unveränderte Refresh-Zyklen überspringen DMX2.</li>
+    <li>DMX1 erhält immer den vollständigen Art-Net-Frame.</li>
+  </ul>
+  <p><strong>Typische Verwendung:</strong> Moderne Geräte an DMX1; ältere, flackeranfällige Geräte an DMX2 mit engem Filterbereich (z. B. Kanäle 31–63).</p>
+  <h3>Kabelgebundener DMX1-Eingangsmodus</h3>
+  <p>Wenn Art-Net länger als das Timeout inaktiv ist, wird kabelgebundenes DMX an Port 2 gelesen. Nur Kanäle innerhalb des Filterbereichs werden an den DMX1-Ausgang weitergegeben.</p>
+</div>
+
+<div class="section major" id="s12">
+  <h2>12. LED-Anzeigen</h2>
+  <h3>GPIO 22 — Status-LED</h3>
+  <table>
+    <tr><th>Muster</th><th>Bedeutung</th></tr>
+    <tr><td>Dauerhaft ein</td><td>WiFi verbunden</td></tr>
+    <tr><td>Einfaches Blinken</td><td>WiFi-Verbindung wird aufgebaut</td></tr>
+    <tr><td>Doppelblinken</td><td>Setup-Access-Point aktiv</td></tr>
+    <tr><td>Dreifachblinken</td><td>OTA-Firmware-Update läuft</td></tr>
+    <tr><td>Atmen (PWM-Fade)</td><td>DMX-Testmodus aktiv</td></tr>
+  </table>
+  <h3>GPIO 13 / 14 — Traffic-LEDs</h3>
+  <p>Blinken bei jedem DMX-Paket ungefähr <strong>150 ms</strong>. Während OTA deaktiviert. Die Traffic-Punkte im Web-Dashboard folgen Paketen für etwa 2 Sekunden (reine Refresh-Zyklen aktivieren sie nicht).</p>
+</div>
+
+<div class="section major" id="s13">
+  <h2>13. Art-Net-Betrieb</h2>
+  <ol>
+    <li>Lichtsoftware so konfigurieren, dass Art-Net an die IP-Adresse des Geräts gesendet wird.</li>
+    <li>Das Art-Net-<strong>Universum</strong> in der Software so einstellen, dass es zur Gerätekonfiguration passt (Standarduniversum 0).</li>
+    <li>Der DMX1-Ausgang wird bei passenden Universen sofort aktualisiert.</li>
+    <li>Wenn der DMX2-Ausgang aktiviert ist, werden gefilterte Kanäle nur bei Änderung innerhalb des Filterbereichs aktualisiert.</li>
+    <li>Wenn der kabelgebundene DMX1-Eingang aktiviert ist und Art-Net länger als das Timeout stoppt, übernimmt der kabelgebundene Eingang die DMX1-Ausgabe.</li>
+    <li>Solange der <strong>DMX-Testmodus</strong> aktiv ist, wird Art-Net ignoriert.</li>
+    <li>Während <strong>OTA-Updates</strong> sind Art-Net und alle DMX-Ein-/Ausgaben deaktiviert.</li>
+  </ol>
+  <p>Der Kurzname des Geräts in Art-Net folgt dem konfigurierten Hostnamen.</p>
+</div>
+
+<div class="section major" id="s14">
+  <h2>14. Firmware-Updates (OTA)</h2>
+  <ol>
+    <li>Sicherstellen, dass das Gerät im WiFi ist und OTA bereit ist (Dashboard zeigt <strong>OTA: Ready</strong>).</li>
+    <li>In der Arduino IDE: <strong>Tools → Port</strong> → Netzwerkport auswählen (z. B. <code>artdmx-bridge32 at ...</code>).</li>
+    <li>Sketch hochladen. OTA-Passwort eingeben, wenn es abgefragt wird (falls konfiguriert).</li>
+  </ol>
+  <p>Während OTA: DMX-Ausgänge senden zuerst Blackout, Art-Net stoppt, GPIO-13/14-Traffic-LEDs aus, GPIO 22 blinkt dreifach bis zum Abschluss.</p>
+</div>
+
+<div class="section major" id="s15">
+  <h2>15. Werkseinstellungen</h2>
+  <table>
+    <tr><th>Methode</th><th>Vorgehensweise</th></tr>
+    <tr><td>Web UI</td><td>Configuration → Danger zone → Factory reset → bestätigen</td></tr>
+    <tr><td>GPIO 15</td><td>Pin 3 Sekunden LOW nach GND halten</td></tr>
+  </table>
+  <p>Löscht alle NVS-Einstellungen und startet mit den Standardwerten aus <code>config.h</code> und <code>secrets.h</code> neu. Einstellungen des DMX-Testmodus werden unabhängig davon bei jedem Start zurückgesetzt.</p>
+</div>
+
+<div class="section major" id="s16">
+  <h2>16. Serieller Monitor und Protokollierung</h2>
+  <p>USB-Serial mit <strong>115200 Baud</strong> verbinden. Das Log entspricht dem Dashboard (WiFi-Ereignisse, Konfigurationsänderungen, Art-Net-Debug, OTA, DMX-Test ein/aus). Der OTA-Fortschritt in Prozent erscheint nur auf Serial.</p>
+  <p>Art-Net-Konsolenlogging auf der Konfigurationsseite aktivieren, um Universen und Kanalwerte zu debuggen. <strong>Log every Nth packet</strong> und <strong>Log only on value change</strong> verwenden, um die Logmenge zu steuern.</p>
+</div>
+
+<div class="section major" id="s17">
+  <h2>17. Fehlersuche</h2>
+  <table>
+    <tr><th>Symptom</th><th>Empfohlene Maßnahme</th></tr>
+    <tr><td>Keine DMX-Ausgabe</td><td>Verdrahtung, DE-Pin, Art-Net-Universum, Sender-IP/Subnetz prüfen</td></tr>
+    <tr><td>Weboberfläche nicht erreichbar</td><td>Geräte-IP versuchen; Setup-AP verbinden; Web-Passwort prüfen</td></tr>
+    <tr><td>Router zeigt esp32-XXXXXX</td><td>Hostname setzen, neu starten, DHCP-Lease erneuern</td></tr>
+    <tr><td>DMX2 aktualisiert nie</td><td>DMX2-Ausgang aktivieren; Filterbereich prüfen; nur Änderungen im Bereich lösen Senden aus</td></tr>
+    <tr><td>Ältere Geräte flackern an DMX2</td><td>Kanalfilter enger setzen; DMX2 sendet nur bei Änderung</td></tr>
+    <tr><td>Kabelgebundener Eingang wird ignoriert</td><td>DMX1-Eingang aktivieren, neu starten, Art-Net-Timeout abwarten</td></tr>
+    <tr><td>Traffic-Punkte bleiben Idle</td><td>Universum prüfen; Punkte folgen Paketen, nicht reinen Refresh-Zyklen</td></tr>
+    <tr><td>Konfigurations-Upload abgelehnt</td><td>Fehlermeldung lesen; Syntax und erforderliche Schlüssel korrigieren</td></tr>
+    <tr><td>DMX-Test hängt auf aktiv</td><td>Neustarten — Testmodus ist nicht persistent</td></tr>
+    <tr><td>OTA schlägt fehl</td><td>Gleiches Netzwerk; korrektes OTA-Passwort</td></tr>
+    <tr><td>Kompilierfehler uart.c</td><td>esp_dmx-Patch für ESP32 Core 3.3.x anwenden (siehe README)</td></tr>
+    <tr><td>Reboot-Schleife mit DMX-Eingang</td><td>esp_dmx-UART2-Kontextfix anwenden</td></tr>
+  </table>
+</div>
+
+<div class="section major" id="s18">
+  <h2>18. Technische Support-Informationen</h2>
+  <table>
+    <tr><th>Element</th><th>Wert</th></tr>
+    <tr><td>Produktname</td><td>artdmx-bridge32</td></tr>
+    <tr><td>Firmware-Version</td><td>2.3.0-web-dmx</td></tr>
+    <tr><td>Handbuchrevision</td><td>1.0 — Juni 2026</td></tr>
+    <tr><td>Copyright</td><td>© 2026 Richard Smetana</td></tr>
+    <tr><td>Lizenz</td><td>GNU General Public License v3 or later (siehe LICENSE)</td></tr>
+    <tr><td>SPDX-Identifier</td><td>GPL-3.0-or-later</td></tr>
+    <tr><td>Konfigurations-Namespace</td><td>artdmx-bridge32 (NVS)</td></tr>
+    <tr><td>Standard-Hostname</td><td>artdmx-bridge32</td></tr>
+    <tr><td>Standard-Web-URL</td><td>http://artdmx-bridge32.local</td></tr>
+    <tr><td>Setup-AP-SSID</td><td>artdmx-bridge32-setup</td></tr>
+    <tr><td>Serielle Baudrate</td><td>115200</td></tr>
+  </table>
+  <p>Entwicklerdokumentation, Bibliothekspatches, API-Details und Quellcode-Struktur sind in der mit dem Firmware-Quellcode gelieferten Projektdatei <strong>README.md</strong> beschrieben.</p>
+  <h3>18.1 Lizenz</h3>
+  <p>Diese Firmware ist freie Software und steht unter der <strong>GNU General Public License Version 3</strong> (oder später). Du darfst sie gemäß den Bedingungen der GPL weitergeben und verändern. Der vollständige Lizenztext befindet sich in der Datei <strong>LICENSE</strong>, die mit dem Quellcode geliefert wird. Es gibt <strong>keine Gewährleistung</strong>.</p>
+  <p>Quelldateien sind mit <code>SPDX-License-Identifier: GPL-3.0-or-later</code> gekennzeichnet. Wenn du veränderte Firmware weitergibst, musst du den zugehörigen Quellcode bereitstellen und deine Änderungen dokumentieren, wie es die GPL verlangt.</p>
+  <div class="footer-line">
+    artdmx-bridge32 Benutzerhandbuch — Copyright © 2026 Richard Smetana — Lizenziert unter GPLv3+
+  </div>
+</div>
+
+</body>
+</html>
