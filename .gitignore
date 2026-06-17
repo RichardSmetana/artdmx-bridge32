@@ -1,0 +1,47 @@
+# =============================================================================
+# artdmx-bridge32 — track source, docs, and assets only
+# =============================================================================
+
+# --- Credentials (use secrets.h.example as template) ---
+secrets.h
+
+# --- Arduino / ESP32 build output ---
+*.o
+*.a
+*.elf
+*.bin
+*.map
+*.hex
+*.eep
+*.lss
+*.sym
+*.d
+build/
+.build/
+
+# --- Generated / duplicate manuals (keep manual.pdf + docs/manual.html) ---
+manual-new.pdf
+manual-01.pdf
+
+# --- Unused duplicate assets ---
+data/
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# --- Editor / IDE local settings ---
+.vscode/
+.idea/
+*.code-workspace
+*.suo
+*.user
+*.swp
+*~
+*.bak
+
+# --- Cursor / local tooling ---
+.cursor/
+.agent-tools/
