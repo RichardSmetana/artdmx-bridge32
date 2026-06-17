@@ -299,6 +299,10 @@ void initWifi() {
     wifiConnectStartedMs = 0;
     wifiHealthCache = true;
     lastWiFiHealthCheckMs = millis();
+    // GOT_IP event usually calls onWiFiConnected(); ensure OTA/mDNS if event raced ahead.
+    if (!otaIsReady()) {
+      onWiFiConnected();
+    }
   }
 }
 

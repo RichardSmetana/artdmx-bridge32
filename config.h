@@ -10,7 +10,7 @@
 #define DEVICE_NAME    "artdmx-bridge32"
 #define VERSION        "2.3.0-web-dmx"
 
-#include "license.h"
+#include "copyright.h"
 
 // First-boot defaults (overridden via web UI after save).
 #define DEFAULT_HOSTNAME          "artdmx-bridge32"

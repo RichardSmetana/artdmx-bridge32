@@ -499,7 +499,7 @@ After the first save through the web UI, values live in NVS. Editing `secrets.h`
 | --- | --- | --- |
 | `DEVICE_NAME` | `artdmx-bridge32` | Firmware identity string |
 | `VERSION` | `2.3.0-web-dmx` | Firmware version string |
-| `COPYRIGHT_LINE` | `Copyright (C) 2026 Richard Smetana` | Boot log and web footer (`license.h`) |
+| `COPYRIGHT_LINE` | `Copyright (C) 2026 Richard Smetana` | Boot log and web footer (`copyright.h`) |
 | `LICENSE_LINE` | `Licensed under GNU GPL v3 or later` | Boot log and web footer |
 | `SPDX_LICENSE_ID` | `GPL-3.0-or-later` | SPDX license identifier |
 | `DEFAULT_HOSTNAME` | `artdmx-bridge32` | First-boot hostname |
@@ -751,7 +751,7 @@ artdmx-bridge32/
 ├── tasks.*                  # networkTask, dmxTask, statusLedTask
 ├── logo_data.h              # Embedded PNG for web header (served at /artdmx-bridge32-logo.png)
 ├── LICENSE                  # GNU General Public License v3 (full text)
-├── license.h                # Copyright and SPDX license identifiers
+├── copyright.h              # Copyright and SPDX license identifiers
 ├── manual.pdf               # User manual (PDF, English)
 ├── manual-de.pdf            # User manual (PDF, German)
 ├── docs/

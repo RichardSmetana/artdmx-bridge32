@@ -1,7 +1,7 @@
 #pragma once
 // artdmx-bridge32 | Copyright (C) 2026 Richard Smetana | GPL-3.0-or-later
 
-// License identifiers — full GPLv3+ text in LICENSE.
+// Copyright and SPDX identifiers — full GPLv3+ text in LICENSE.
 
 #define PROJECT_COPYRIGHT "Copyright (C) 2026 Richard Smetana"
 #define COPYRIGHT_LINE    PROJECT_COPYRIGHT
