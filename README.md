@@ -66,6 +66,7 @@ Sources: `docs/manual.html` (English) · `docs/manual-de.html` (German)
 - **Channel filter** for port 2: limits the channel range and avoids re-sending unchanged data to legacy fixtures on DMX2
 - **Web dashboard** with live status, DMX traffic indicators, DMX test mode banner, and auto-scrolling log
 - **Web configuration** for WiFi, hostname, Art-Net, DMX timing, input mode, debug settings, and factory reset
+- **Localized configuration page** — English or German UI (autodetect, or fixed language); Dashboard and DMX Test remain English
 - **Configuration backup / restore** — download and upload all NVS settings as an editable `.conf` text file
 - **DMX test page** — manual DMX output with 16 sliders; Art-Net ignored while test mode is on
 - **Site logo and hostname** on all web pages
@@ -246,7 +247,7 @@ The Art-Net universe must match the universe configured in the web UI. The defau
 | Page | URL | Description |
 | --- | --- | --- |
 | Dashboard | `/` | Live status, DMX traffic dots, Art-Net state, DMX test mode banner, and rolling log |
-| Configuration | `/config` | Runtime settings editor, backup/restore, factory reset |
+| Configuration | `/config` | Runtime settings editor, backup/restore, factory reset; English or German UI |
 | DMX Test | `/dmx-test` | Manual DMX output with sliders (see [DMX test mode](#dmx-test-mode)) |
 | Logo | `/artdmx-bridge32-logo.png` | Header image on all pages |
 
@@ -275,7 +276,19 @@ Refreshes every **500 ms**. Available without extra software beyond a browser.
 | **Upload / Upload and Reboot** | Import `.conf` file or pasted text |
 | **Factory reset** | Erase NVS and reboot to defaults (confirmation dialog) |
 
-Settings are grouped: **Device** (hostname, web password), **WiFi**, **OTA**, **ArtNet / DMX**, **Backup / restore**, **Danger zone**.
+Settings are grouped: **Device** (interface language, hostname, web password), **WiFi**, **OTA**, **ArtNet / DMX**, **Backup / restore**, **Danger zone**.
+
+#### Interface language
+
+The **Configuration** page (`/config`) can be shown in **English** or **German**. Set **Interface language** in the **Device** section:
+
+| Value | Mode | Behavior |
+| --- | --- | --- |
+| `Autodetect` (default) | `ui_lang=0` | Uses the browser language (`de*` → German, otherwise English) |
+| `English` | `ui_lang=1` | Always English |
+| `German` | `ui_lang=2` | Always German |
+
+Changing the language updates labels, buttons, and hints on the config page immediately. Click **Save** to store the preference in NVS. **Dashboard** and **DMX Test** stay in English. API error messages from the device remain in English.
 
 ### API endpoints
 
@@ -360,6 +373,7 @@ Runtime configuration is stored in NVS under the Preferences namespace `artdmx-b
 | Setting | Default | Notes |
 | --- | --- | --- |
 | WiFi SSID / password | from `secrets.h` | Reboot recommended after changing |
+| Interface language | Autodetect | Config page only: `0` = autodetect, `1` = English, `2` = German |
 | Hostname | `artdmx-bridge32` | mDNS, OTA, DHCP client name, and web login username — see [Hostname and DHCP](#hostname-and-dhcp) |
 | OTA password | from `secrets.h` | Empty value disables OTA password protection |
 | Web password | empty | When set, protects the web UI; username = hostname — see [Web login](#web-login) |
@@ -401,7 +415,7 @@ On the Configuration page, **Backup / restore** lets you export and import all p
 
 **Upload:** paste or choose a file, then **Upload** or **Upload and Reboot**. Use `POST /api/config/upload` with `Content-Type: text/plain`.
 
-Format: `key=value` lines, `#` comments, booleans as `true`/`false`. Quote values that contain spaces: `wifi_pass="my secret"`. All **setting** keys in the downloaded file are required on upload; optional metadata keys are `format_version`, `device`, and `firmware`.
+Format: `key=value` lines, `#` comments, booleans as `true`/`false`. Quote values that contain spaces: `wifi_pass="my secret"`. All **setting** keys in the downloaded file are required on upload; optional metadata keys are `format_version`, `device`, `firmware`, and `ui_lang` (if omitted on upload, the current interface language is kept).
 
 Upload is validated before any change is applied. Syntax errors, unknown keys, duplicate keys, missing keys, or out-of-range values return an error and **leave existing settings unchanged**.
 
@@ -429,6 +443,7 @@ artnet_debug_every=1
 artnet_debug_ch_start=1
 artnet_debug_ch_end=4
 artnet_debug_on_change=false
+ui_lang=0
 ```
 
 ### Channel filter
@@ -704,7 +719,8 @@ Everything below is available to end users without recompiling (unless noted). U
 | **Network** | mDNS `http://<hostname>.local` | Hostname in Config |
 | **Network** | DHCP client hostname | Hostname in Config |
 | **Web** | Dashboard `/` | Status, traffic, log, banners |
-| **Web** | Configuration `/config` | All NVS settings |
+| **Web** | Configuration `/config` | All NVS settings; EN/DE UI on config page |
+| **Web** | Config interface language | Config → Device → Interface language (autodetect / EN / DE) |
 | **Web** | DMX Test `/dmx-test` | Manual DMX, sliders, buffer dumps |
 | **Web** | HTTP basic auth | Optional web password; username = hostname |
 | **Web** | Save / Save and Reboot / Reboot | Config page |
@@ -740,6 +756,7 @@ artdmx-bridge32/
 ├── globals.h / globals.cpp  # ArtNet instance, queue, traffic timestamps
 ├── wifi_manager.*           # WiFi connect, AP fallback, mDNS, DHCP hostname
 ├── web_server.*             # Dashboard, config UI, DMX test UI, REST API
+├── web_config_i18n.h        # Config page English/German strings (client-side)
 ├── ota_manager.*            # ArduinoOTA setup
 ├── device_log.*             # Rolling log buffer for web UI and Serial
 ├── dmx_test.*               # DMX test mode, sliders, buffer (runtime only)

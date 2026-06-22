@@ -104,7 +104,7 @@
   <div class="meta">
     <strong>Benutzerhandbuch</strong><br>
     Firmware-Version 2.3.0-web-dmx<br>
-    Dokumentrevision 1.0 — Juni 2026<br><br>
+    Dokumentrevision 1.1 — Juni 2026<br><br>
     Copyright © 2026 Richard Smetana<br>
     Lizenziert unter <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL v3 oder später</a>
   </div>
@@ -166,7 +166,7 @@
   <table>
     <tr><th>Funktion</th><th>Beschreibung</th></tr>
     <tr><td>Web-Dashboard</td><td>Live-Status, Traffic-Anzeigen, laufendes Log, Setup- und Testmodus-Banner</td></tr>
-    <tr><td>Web-Konfiguration</td><td>WiFi, Hostname, Art-Net, DMX-Timing, Debug-Logging, Werkseinstellungen</td></tr>
+    <tr><td>Web-Konfiguration</td><td>WiFi, Hostname, Art-Net, DMX-Timing, Debug-Logging, Werkseinstellungen; englische oder deutsche Oberfläche auf der Konfigurationsseite</td></tr>
     <tr><td>Konfigurationssicherung</td><td>Herunterladen/Hochladen editierbarer <code>artdmx-bridge32.conf</code>-Textdateien</td></tr>
     <tr><td>DMX-Testseite</td><td>16 manuelle Slider; Art-Net wird ignoriert, solange der Testmodus aktiv ist</td></tr>
     <tr><td>mDNS</td><td>Zugriff über <code>http://&lt;hostname&gt;.local</code></td></tr>
@@ -206,6 +206,7 @@
     <tr><td>Kabelgebundener DMX1-Eingang</td><td>Deaktiviert</td></tr>
     <tr><td>Kanalfilter</td><td>Kanäle 1–512</td></tr>
     <tr><td>Serieller Monitor</td><td>115200 Baud</td></tr>
+    <tr><td>Oberflächensprache (Konfiguration)</td><td>Automatisch (Browser)</td></tr>
   </table>
 </div>
 
@@ -298,6 +299,7 @@
     <tr><td>Serielles Log</td><td>Letzte 32 Logzeilen; automatisches Scrollen, außer du scrollst nach oben</td></tr>
   </table>
   <h3>7.2 Konfiguration (<code>/config</code>)</h3>
+  <p>Die Konfigurationsseite unterstützt Beschriftungen auf <strong>Englisch</strong> und <strong>Deutsch</strong>. Unter <strong>Gerät</strong> die <strong>Oberflächensprache</strong> wählen: <em>Automatisch</em> (Browsersprache), <em>Englisch</em> oder <em>Deutsch</em>. Gilt nur für diese Seite; Dashboard und DMX-Test bleiben auf Englisch. Zum Speichern im Flash <strong>Speichern</strong> verwenden.</p>
   <table>
     <tr><th>Schaltfläche / Aktion</th><th>Beschreibung</th></tr>
     <tr><td>Save</td><td>Einstellungen in den Flashspeicher schreiben</td></tr>
@@ -317,6 +319,7 @@
   <table>
     <tr><th>Einstellung</th><th>Standard</th><th>Hinweise</th></tr>
     <tr><td>WiFi SSID / Passwort</td><td>Aus secrets.h</td><td>Neustart nach Änderung empfohlen</td></tr>
+    <tr><td>Oberflächensprache</td><td>Automatisch</td><td>UI der Konfigurationsseite: 0 = automatisch, 1 = Englisch, 2 = Deutsch (<code>ui_lang</code> in .conf)</td></tr>
     <tr><td>Hostname</td><td>artdmx-bridge32</td><td>mDNS, OTA, DHCP-Name, Web-Benutzername (max. 31 Zeichen)</td></tr>
     <tr><td>Web-Passwort</td><td>(leer)</td><td>Aktiviert HTTP-Basic-Auth, wenn gesetzt</td></tr>
     <tr><td>OTA-Passwort</td><td>Aus secrets.h</td><td>Leer = OTA ohne Passwort</td></tr>
@@ -367,7 +370,7 @@
     <li>Zeilen, die mit <code>#</code> beginnen, sind Kommentare</li>
     <li>Boolesche Werte: <code>true</code> oder <code>false</code></li>
     <li>Werte mit Leerzeichen in Anführungszeichen setzen: <code>wifi_pass="my secret"</code></li>
-    <li>Alle Schlüssel aus der heruntergeladenen Datei sind beim Upload erforderlich</li>
+    <li>Alle Schlüssel aus der heruntergeladenen Datei sind beim Upload erforderlich (optional <code>ui_lang</code> — wenn weggelassen, bleibt die aktuelle Sprache erhalten)</li>
   </ul>
   <div class="important">
     <strong>Validierung.</strong> Syntaxfehler, unbekannte Schlüssel, doppelte Schlüssel, fehlende Schlüssel oder ungültige Werte führen dazu, dass der Upload <strong>abgelehnt</strong> wird. Bestehende Einstellungen werden bei einem Fehler <strong>nicht geändert</strong>.
@@ -468,7 +471,7 @@
     <tr><th>Element</th><th>Wert</th></tr>
     <tr><td>Produktname</td><td>artdmx-bridge32</td></tr>
     <tr><td>Firmware-Version</td><td>2.3.0-web-dmx</td></tr>
-    <tr><td>Handbuchrevision</td><td>1.0 — Juni 2026</td></tr>
+    <tr><td>Handbuchrevision</td><td>1.1 — Juni 2026</td></tr>
     <tr><td>Copyright</td><td>© 2026 Richard Smetana</td></tr>
     <tr><td>Lizenz</td><td>GNU General Public License v3 or later (siehe LICENSE)</td></tr>
     <tr><td>SPDX-Identifier</td><td>GPL-3.0-or-later</td></tr>

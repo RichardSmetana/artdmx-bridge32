@@ -104,7 +104,7 @@
   <div class="meta">
     <strong>User Manual</strong><br>
     Firmware version 2.3.0-web-dmx<br>
-    Document revision 1.0 — June 2026<br><br>
+    Document revision 1.1 — June 2026<br><br>
     Copyright © 2026 Richard Smetana<br>
     Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL v3 or later</a>
   </div>
@@ -166,7 +166,7 @@
   <table>
     <tr><th>Feature</th><th>Description</th></tr>
     <tr><td>Web dashboard</td><td>Live status, traffic indicators, rolling log, setup and test-mode banners</td></tr>
-    <tr><td>Web configuration</td><td>WiFi, hostname, Art-Net, DMX timing, debug logging, factory reset</td></tr>
+    <tr><td>Web configuration</td><td>WiFi, hostname, Art-Net, DMX timing, debug logging, factory reset; English or German UI on the config page</td></tr>
     <tr><td>Configuration backup</td><td>Download/upload editable <code>artdmx-bridge32.conf</code> text files</td></tr>
     <tr><td>DMX test page</td><td>16 manual sliders; Art-Net ignored while test mode is active</td></tr>
     <tr><td>mDNS</td><td>Access via <code>http://&lt;hostname&gt;.local</code></td></tr>
@@ -206,6 +206,7 @@
     <tr><td>DMX1 wired input</td><td>Disabled</td></tr>
     <tr><td>Channel filter</td><td>Channels 1–512</td></tr>
     <tr><td>Serial Monitor</td><td>115200 baud</td></tr>
+    <tr><td>Config interface language</td><td>Autodetect (browser)</td></tr>
   </table>
 </div>
 
@@ -298,6 +299,7 @@
     <tr><td>Serial log</td><td>Last 32 log lines; auto-scrolls unless you scroll up</td></tr>
   </table>
   <h3>7.2 Configuration (<code>/config</code>)</h3>
+  <p>The configuration page supports <strong>English</strong> and <strong>German</strong> labels. Set <strong>Interface language</strong> under <strong>Device</strong>: <em>Autodetect</em> (browser language), <em>English</em>, or <em>German</em>. The choice applies to this page only; Dashboard and DMX Test remain in English. Save to persist in flash.</p>
   <table>
     <tr><th>Button / action</th><th>Description</th></tr>
     <tr><td>Save</td><td>Write settings to flash</td></tr>
@@ -317,6 +319,7 @@
   <table>
     <tr><th>Setting</th><th>Default</th><th>Notes</th></tr>
     <tr><td>WiFi SSID / password</td><td>From secrets.h</td><td>Reboot recommended after change</td></tr>
+    <tr><td>Interface language</td><td>Autodetect</td><td>Config page UI: 0 = autodetect, 1 = English, 2 = German (<code>ui_lang</code> in .conf)</td></tr>
     <tr><td>Hostname</td><td>artdmx-bridge32</td><td>mDNS, OTA, DHCP name, web username (max 31 chars)</td></tr>
     <tr><td>Web password</td><td>(empty)</td><td>Enables HTTP basic auth when set</td></tr>
     <tr><td>OTA password</td><td>From secrets.h</td><td>Empty = OTA without password</td></tr>
@@ -367,7 +370,7 @@
     <li>Lines starting with <code>#</code> are comments</li>
     <li>Booleans: <code>true</code> or <code>false</code></li>
     <li>Quote values with spaces: <code>wifi_pass="my secret"</code></li>
-    <li>All keys from the downloaded file are required on upload</li>
+    <li>All keys from the downloaded file are required on upload (except optional <code>ui_lang</code> — if omitted, the current language is kept)</li>
   </ul>
   <div class="important">
     <strong>Validation.</strong> Syntax errors, unknown keys, duplicate keys, missing keys, or illegal values cause upload to be <strong>rejected</strong>. Existing settings are <strong>not changed</strong> on failure.
@@ -468,7 +471,7 @@
     <tr><th>Item</th><th>Value</th></tr>
     <tr><td>Product name</td><td>artdmx-bridge32</td></tr>
     <tr><td>Firmware version</td><td>2.3.0-web-dmx</td></tr>
-    <tr><td>Manual revision</td><td>1.0 — June 2026</td></tr>
+    <tr><td>Manual revision</td><td>1.1 — June 2026</td></tr>
     <tr><td>Copyright</td><td>© 2026 Richard Smetana</td></tr>
     <tr><td>License</td><td>GNU General Public License v3 or later (see LICENSE)</td></tr>
     <tr><td>SPDX identifier</td><td>GPL-3.0-or-later</td></tr>
