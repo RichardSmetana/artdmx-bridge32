@@ -91,6 +91,7 @@ static void applyConfigDefaults() {
   cfg.artnetDebugChStart = DEFAULT_ARTNET_DEBUG_CH_START;
   cfg.artnetDebugChEnd = DEFAULT_ARTNET_DEBUG_CH_END;
   cfg.artnetDebugOnChange = DEFAULT_ARTNET_DEBUG_ON_CHANGE != 0;
+  cfg.uiLang = DEFAULT_UI_LANG;
 }
 
 static void normalizeArtnetDebugChannels() {
@@ -170,6 +171,7 @@ void saveConfigToNvs() {
   prefs.putUShort("dbg_ch_start", cfg.artnetDebugChStart);
   prefs.putUShort("dbg_ch_end", cfg.artnetDebugChEnd);
   prefs.putBool("dbg_on_chg", cfg.artnetDebugOnChange);
+  prefs.putUChar("ui_lang", cfg.uiLang);
   prefs.end();
 }
 
@@ -226,6 +228,10 @@ void loadConfigFromNvs() {
     cfg.artnetDebugChEnd = cfg.dmx2FilterEnd;
   }
   cfg.artnetDebugOnChange = prefs.getBool("dbg_on_chg", cfg.artnetDebugOnChange);
+  cfg.uiLang = prefs.getUChar("ui_lang", cfg.uiLang);
+  if (cfg.uiLang > UI_LANG_DE) {
+    cfg.uiLang = DEFAULT_UI_LANG;
+  }
 
   prefs.end();
   normalizeDmx2Filter();
@@ -292,7 +298,8 @@ String buildConfigJson() {
   json += "\"artnet_debug_every\":" + String(cfg.artnetDebugEvery) + ",";
   json += "\"artnet_debug_ch_start\":" + String(cfg.artnetDebugChStart) + ",";
   json += "\"artnet_debug_ch_end\":" + String(cfg.artnetDebugChEnd) + ",";
-  json += "\"artnet_debug_on_change\":" + String(cfg.artnetDebugOnChange ? "true" : "false");
+  json += "\"artnet_debug_on_change\":" + String(cfg.artnetDebugOnChange ? "true" : "false") + ",";
+  json += "\"ui_lang\":" + String(cfg.uiLang);
   json += "}";
   return json;
 }
@@ -381,6 +388,7 @@ String exportConfigText() {
   appendConfigLine(out, "artnet_debug_ch_start", (uint32_t)cfg.artnetDebugChStart);
   appendConfigLine(out, "artnet_debug_ch_end", (uint32_t)cfg.artnetDebugChEnd);
   appendConfigLine(out, "artnet_debug_on_change", cfg.artnetDebugOnChange);
+  appendConfigLine(out, "ui_lang", (uint32_t)cfg.uiLang);
   return out;
 }
 
@@ -504,6 +512,10 @@ static bool validateImportedConfig(const DeviceConfig &parsed, String &error) {
   }
   if (parsed.enableDmxInput && parsed.enableDmx2Output) {
     error = "enable_dmx_input and enable_dmx2_output cannot both be true";
+    return false;
+  }
+  if (parsed.uiLang > UI_LANG_DE) {
+    error = "ui_lang out of range (0=auto, 1=en, 2=de)";
     return false;
   }
   return true;
@@ -742,6 +754,14 @@ static bool assignConfigKey(DeviceConfig &parsed,
     parsed.artnetDebugOnChange = boolean;
     return true;
   }
+  if (strcmp(key, "ui_lang") == 0) {
+    if (!parseConfigUint(parsedValue, number) || number > UI_LANG_DE) {
+      error = "Invalid ui_lang (0=auto, 1=en, 2=de)";
+      return false;
+    }
+    parsed.uiLang = (uint8_t)number;
+    return true;
+  }
 
   error = "Line " + String(lineNo) + ": unknown key '" + String(key) + "'";
   return false;
@@ -803,6 +823,7 @@ bool importConfigText(const String &text, String &error) {
   memset(&parsed, 0, sizeof(parsed));
   ConfigKeyFlags flags;
   memset(&flags, 0, sizeof(flags));
+  bool sawUiLang = false;
 
   uint16_t lineNo = 0;
   int lineStart = 0;
@@ -839,7 +860,8 @@ bool importConfigText(const String &text, String &error) {
 
       if (strcmp(key.c_str(), "format_version") != 0 &&
           strcmp(key.c_str(), "device") != 0 &&
-          strcmp(key.c_str(), "firmware") != 0) {
+          strcmp(key.c_str(), "firmware") != 0 &&
+          strcmp(key.c_str(), "ui_lang") != 0) {
         if (!markConfigKey(flags, key.c_str(), error)) {
           return false;
         }
@@ -847,6 +869,9 @@ bool importConfigText(const String &text, String &error) {
 
       if (!assignConfigKey(parsed, key.c_str(), value, error, lineNo)) {
         return false;
+      }
+      if (strcmp(key.c_str(), "ui_lang") == 0) {
+        sawUiLang = true;
       }
     }
 
@@ -862,6 +887,10 @@ bool importConfigText(const String &text, String &error) {
 
   if (!validateImportedConfig(parsed, error)) {
     return false;
+  }
+
+  if (!sawUiLang) {
+    parsed.uiLang = cfg.uiLang;
   }
 
   cfg = parsed;

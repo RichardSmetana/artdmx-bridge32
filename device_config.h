@@ -30,6 +30,7 @@ struct DeviceConfig {
   uint16_t artnetDebugChStart;
   uint16_t artnetDebugChEnd;
   bool artnetDebugOnChange;
+  uint8_t uiLang;  // UI_LANG_AUTO | UI_LANG_EN | UI_LANG_DE
 };
 
 extern Preferences prefs;

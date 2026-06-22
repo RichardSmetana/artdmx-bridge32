@@ -29,6 +29,11 @@
 #define DEFAULT_ARTNET_DEBUG_CH_START 1
 #define DEFAULT_ARTNET_DEBUG_CH_END   4
 #define DEFAULT_ARTNET_DEBUG_ON_CHANGE 0
+#define DEFAULT_UI_LANG           0   // 0=autodetect, 1=English, 2=German
+
+#define UI_LANG_AUTO              0
+#define UI_LANG_EN                1
+#define UI_LANG_DE                2
 
 #define WIFI_STATUS_BLINK_MS     500
 #define WIFI_AP_DOUBLE_ON_MS     120

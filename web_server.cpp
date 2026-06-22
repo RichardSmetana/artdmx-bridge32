@@ -27,6 +27,7 @@
 #include "led.h"
 #include "dmx_test.h"
 #include "logo_data.h"
+#include "web_config_i18n.h"
 
 WebServer server(80);
 
@@ -267,6 +268,23 @@ static bool authenticateWeb() {
     return false;
   }
   return true;
+}
+
+static void sendConfigNav(const char *activePage) {
+  server.sendContent(F("<nav>"));
+  server.sendContent(F("<a href=\"/\""));
+  if (strcmp(activePage, "home") == 0) {
+    server.sendContent(F(" class=\"active\""));
+  }
+  server.sendContent(F(" data-i18n=\"nav_dashboard\">Dashboard</a><a href=\"/config\""));
+  if (strcmp(activePage, "config") == 0) {
+    server.sendContent(F(" class=\"active\""));
+  }
+  server.sendContent(F(" data-i18n=\"nav_config\">Config</a><a href=\"/dmx-test\""));
+  if (strcmp(activePage, "dmx-test") == 0) {
+    server.sendContent(F(" class=\"active\""));
+  }
+  server.sendContent(F(" data-i18n=\"nav_dmx_test\">DMX Test</a></nav>"));
 }
 
 static void sendNav(const char *activePage) {
@@ -520,130 +538,141 @@ static void handleConfigPage() {
   server.setContentLength(CONTENT_LENGTH_UNKNOWN);
   server.send(200, "text/html", "");
   sendPageHead("Config");
-  server.sendContent(F("<p class=\"sub\">Settings stored in flash · reboot after DMX1 input mode changes</p>"));
-  sendNav("config");
+  server.sendContent(F("<p class=\"sub\" data-i18n=\"page_sub\">Settings stored in flash · reboot after DMX1 input mode changes</p>"));
+  sendConfigNav("config");
 
   server.sendContent(F(R"page(
   <section>
     <form id="config-form" onsubmit="return false;">
       <fieldset>
-        <legend>Device</legend>
+        <legend data-i18n="section_device">Device</legend>
         <div class="field">
-          <label for="hostname">Hostname (mDNS, OTA, web login name)</label>
+          <label for="ui-lang" data-i18n="label_ui_lang">Interface language</label>
+          <select id="ui-lang">
+            <option value="0" data-i18n="lang_auto">Autodetect</option>
+            <option value="1" data-i18n="lang_en">English</option>
+            <option value="2" data-i18n="lang_de">German</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="hostname" data-i18n="label_hostname">Hostname (mDNS, OTA, web login name)</label>
           <input type="text" id="hostname" maxlength="31" required>
         </div>
         <div class="field">
-          <label for="web-pass">Web UI password (leave empty to disable)</label>
+          <label for="web-pass" data-i18n="label_web_pass">Web UI password (leave empty to disable)</label>
           <input type="password" id="web-pass" maxlength="31">
         </div>
       </fieldset>
       <fieldset>
-        <legend>WiFi</legend>
+        <legend data-i18n="section_wifi">WiFi</legend>
         <div class="field">
-          <label for="wifi-ssid">SSID</label>
+          <label for="wifi-ssid" data-i18n="label_wifi_ssid">SSID</label>
           <input type="text" id="wifi-ssid" maxlength="32" required>
         </div>
         <div class="field">
-          <label for="wifi-pass">Password</label>
+          <label for="wifi-pass" data-i18n="label_wifi_pass">Password</label>
           <input type="password" id="wifi-pass" maxlength="63">
         </div>
       </fieldset>
       <fieldset>
-        <legend>OTA</legend>
+        <legend data-i18n="section_ota">OTA</legend>
         <div class="field">
-          <label for="ota-pass">OTA password (leave empty to disable)</label>
+          <label for="ota-pass" data-i18n="label_ota_pass">OTA password (leave empty to disable)</label>
           <input type="password" id="ota-pass" maxlength="31">
         </div>
       </fieldset>
       <fieldset>
-        <legend>ArtNet / DMX</legend>
+        <legend data-i18n="section_artnet">ArtNet / DMX</legend>
         <div class="field">
-          <label for="artnet-universe">ArtNet universe</label>
+          <label for="artnet-universe" data-i18n="label_artnet_universe">ArtNet universe</label>
           <input type="number" id="artnet-universe" min="0" max="32767" step="1" required>
         </div>
         <div class="field">
-          <label for="artnet-timeout">ArtNet timeout (ms)</label>
+          <label for="artnet-timeout" data-i18n="label_artnet_timeout">ArtNet timeout (ms)</label>
           <input type="number" id="artnet-timeout" min="500" max="60000" step="100" required>
         </div>
         <div class="field">
-          <label for="dmx-refresh">DMX refresh interval (ms)</label>
+          <label for="dmx-refresh" data-i18n="label_dmx_refresh">DMX refresh interval (ms)</label>
           <input type="number" id="dmx-refresh" min="10" max="1000" step="1" required>
         </div>
         <div class="field">
-          <label><input type="checkbox" id="send-full-packet"> Send full 512-channel DMX packets</label>
+          <label><input type="checkbox" id="send-full-packet"> <span data-i18n="field_send_full_packet">Send full 512-channel DMX packets</span></label>
         </div>
         <div class="field">
-          <label><input type="checkbox" id="enable-dmx2-output"> Enable DMX2 output (mirrors ArtNet to GPIO 19/18/21)</label>
+          <label><input type="checkbox" id="enable-dmx2-output"> <span data-i18n="field_enable_dmx2">Enable DMX2 output (mirrors ArtNet to GPIO 19/18/21)</span></label>
         </div>
         <div class="field">
-          <label><input type="checkbox" id="enable-dmx-input"> Enable DMX1 wired input (disables DMX2 output)</label>
+          <label><input type="checkbox" id="enable-dmx-input"> <span data-i18n="field_enable_dmx_input">Enable DMX1 wired input (disables DMX2 output)</span></label>
         </div>
         <div class="field">
-          <label for="dmx2-filter-start">Channel filter start (1–512)</label>
+          <label for="dmx2-filter-start" data-i18n="label_filter_start">Channel filter start (1–512)</label>
           <input type="number" id="dmx2-filter-start" min="1" max="512" step="1" required>
         </div>
         <div class="field">
-          <label for="dmx2-filter-end">Channel filter end (1–512)</label>
+          <label for="dmx2-filter-end" data-i18n="label_filter_end">Channel filter end (1–512)</label>
           <input type="number" id="dmx2-filter-end" min="1" max="512" step="1" required>
         </div>
-        <p class="hint">DMX1 input: forwards only this range to DMX1 out. DMX2 output: sends only this range, and only when a value in the range changes.</p>
+        <p class="hint" data-i18n="hint_port2">DMX1 input: forwards only this range to DMX1 out. DMX2 output: sends only this range, and only when a value in the range changes.</p>
         <div class="field">
-          <label for="artnet-debug-mode">ArtNet console log</label>
+          <label for="artnet-debug-mode" data-i18n="label_artnet_debug_mode">ArtNet console log</label>
           <select id="artnet-debug-mode">
-            <option value="0">Off</option>
-            <option value="1">Matching universe only</option>
-            <option value="2">Other universes only (ignored)</option>
-            <option value="3">All universes</option>
+            <option value="0" data-i18n="debug_off">Off</option>
+            <option value="1" data-i18n="debug_matched">Matching universe only</option>
+            <option value="2" data-i18n="debug_ignored">Other universes only (ignored)</option>
+            <option value="3" data-i18n="debug_all">All universes</option>
           </select>
         </div>
         <div class="field">
-          <label for="artnet-debug-ch-start">Debug log channel start (1–512)</label>
+          <label for="artnet-debug-ch-start" data-i18n="label_debug_ch_start">Debug log channel start (1–512)</label>
           <input type="number" id="artnet-debug-ch-start" min="1" max="512" step="1" value="1">
         </div>
         <div class="field">
-          <label for="artnet-debug-ch-end">Debug log channel end (1–512)</label>
+          <label for="artnet-debug-ch-end" data-i18n="label_debug_ch_end">Debug log channel end (1–512)</label>
           <input type="number" id="artnet-debug-ch-end" min="1" max="512" step="1" value="4">
         </div>
         <div class="field">
-          <label for="artnet-debug-every">Log every Nth packet (1 = every packet)</label>
+          <label for="artnet-debug-every" data-i18n="label_debug_every">Log every Nth packet (1 = every packet)</label>
           <input type="number" id="artnet-debug-every" min="1" max="1000" step="1" value="1">
         </div>
         <div class="field">
-          <label><input type="checkbox" id="artnet-debug-on-change"> Log only when debug channel values change</label>
+          <label><input type="checkbox" id="artnet-debug-on-change"> <span data-i18n="field_debug_on_change">Log only when debug channel values change</span></label>
         </div>
-        <p class="hint">Logged lines show DMX values for the debug channel range (e.g. 3–7). With “values change” enabled, identical frames are not logged.</p>
+        <p class="hint" data-i18n="hint_debug_log">Logged lines show DMX values for the debug channel range (e.g. 3–7). With “values change” enabled, identical frames are not logged.</p>
       </fieldset>
       <fieldset>
-        <legend>Backup / restore</legend>
-        <p class="hint">Download all permanent settings as a text file (<code>artdmx-bridge32.conf</code>), edit in any text editor, then upload. Syntax errors or illegal values are rejected and existing settings are left unchanged.</p>
+        <legend data-i18n="section_backup">Backup / restore</legend>
+        <p class="hint" data-i18n="hint_backup">Download all permanent settings as a text file (artdmx-bridge32.conf), edit in any text editor, then upload. Syntax errors or illegal values are rejected and existing settings are left unchanged.</p>
         <div class="action-row">
-          <button type="button" class="btn-secondary" onclick="downloadConfig()">Download .conf</button>
+          <button type="button" class="btn-secondary" onclick="downloadConfig()" data-i18n="btn_download">Download .conf</button>
           <input type="file" id="config-file" accept=".conf,.txt,text/plain">
         </div>
         <div class="field">
-          <label for="config-upload-text">Or paste configuration text</label>
+          <label for="config-upload-text" data-i18n="label_upload_text">Or paste configuration text</label>
           <textarea id="config-upload-text" rows="10" placeholder="# Paste artdmx-bridge32.conf contents here"></textarea>
         </div>
         <div class="action-row">
-          <button type="button" onclick="uploadConfig(false)">Upload</button>
-          <button type="button" class="warn-btn" onclick="uploadConfig(true)">Upload and Reboot</button>
+          <button type="button" onclick="uploadConfig(false)" data-i18n="btn_upload">Upload</button>
+          <button type="button" class="warn-btn" onclick="uploadConfig(true)" data-i18n="btn_upload_reboot">Upload and Reboot</button>
         </div>
       </fieldset>
       <fieldset>
-        <legend>Danger zone</legend>
-        <p class="hint">Erases all saved settings (WiFi, hostname, DMX options) and reboots with factory defaults.</p>
-        <button type="button" class="danger-btn" onclick="factoryReset()">Factory reset</button>
+        <legend data-i18n="section_danger">Danger zone</legend>
+        <p class="hint" data-i18n="hint_danger">Erases all saved settings (WiFi, hostname, DMX options) and reboots with factory defaults.</p>
+        <button type="button" class="danger-btn" onclick="factoryReset()" data-i18n="btn_factory_reset">Factory reset</button>
       </fieldset>
       <div class="action-row">
-        <button type="button" onclick='saveConfig(false)'>Save</button>
-        <button type="button" class="warn-btn" onclick='saveConfig(true)'>Save and Reboot</button>
-        <button type="button" class="btn-secondary" onclick='rebootDevice()'>Reboot</button>
+        <button type="button" onclick='saveConfig(false)' data-i18n="btn_save">Save</button>
+        <button type="button" class="warn-btn" onclick='saveConfig(true)' data-i18n="btn_save_reboot">Save and Reboot</button>
+        <button type="button" class="btn-secondary" onclick='rebootDevice()' data-i18n="btn_reboot">Reboot</button>
         <span id="cfg-msg" class="msg"></span>
       </div>
-      <p class="hint">WiFi and hostname changes take full effect after reboot. DMX2 output and DMX1 input mode changes also require reboot. DMX1 wired input requires the esp_dmx <code>uart.c</code> UART2 patch (see README). Hold GPIO 15 LOW for 3 seconds to erase all settings and restore defaults. If WiFi is unavailable, connect to the <strong id="ap-hint-ssid">hostname-setup</strong> access point and open the device IP. When on your network, use <strong id="mdns-hint">http://hostname.local</strong>.</p>
+      <p class="hint"><span data-i18n="hint_footer_before">WiFi and hostname changes take full effect after reboot.</span><strong id="ap-hint-ssid">hostname-setup</strong><span data-i18n="hint_footer_mid"> access point and open the device IP. When on your network, use </span><strong id="mdns-hint">http://hostname.local</strong><span data-i18n="hint_footer_after">.</span></p>
     </form>
   </section>
   <script>
+)page"));
+  server.sendContent(FPSTR(CONFIG_PAGE_I18N_SCRIPT));
+  server.sendContent(F(R"page(
     function setMsg(text, kind) {
       var el = document.getElementById('cfg-msg');
       el.textContent = text;
@@ -660,6 +689,8 @@ static void handleConfigPage() {
       }
     }
     function fillForm(data) {
+      document.getElementById('ui-lang').value = String(data.ui_lang != null ? data.ui_lang : 0);
+      setLangFromPref(parseInt(document.getElementById('ui-lang').value, 10), true);
       document.getElementById('hostname').value = data.hostname || data.ota_hostname || '';
       document.getElementById('web-pass').value = data.web_password || '';
       document.getElementById('wifi-ssid').value = data.wifi_ssid || '';
@@ -687,6 +718,7 @@ static void handleConfigPage() {
       var host = data.hostname || data.ota_hostname || 'hostname';
       document.getElementById('ap-hint-ssid').textContent = host + '-setup';
       document.getElementById('mdns-hint').textContent = 'http://' + host + '.local';
+      document.title = host + ' · ' + t('page_title');
     }
     async function loadConfig() {
       var res = await fetch('/api/config');
@@ -702,12 +734,12 @@ static void handleConfigPage() {
         try {
           text = await fileInput.files[0].text();
         } catch (e) {
-          setMsg('Could not read file', 'err');
+          setMsg(t('msg_could_not_read'), 'err');
           return;
         }
       }
       if (!text || !text.trim()) {
-        setMsg('Choose a file or paste configuration text', 'err');
+        setMsg(t('msg_choose_file'), 'err');
         return;
       }
       try {
@@ -722,20 +754,21 @@ static void handleConfigPage() {
         });
         var data = await res.json();
         if (!res.ok) {
-          setMsg(data.error || 'Upload failed', 'err');
+          setMsg(data.error || t('msg_upload_failed'), 'err');
           return;
         }
-        setMsg(data.message || 'Uploaded', data.reboot ? 'warn' : 'ok');
+        setMsg(data.reboot ? t('msg_rebooting') : t('msg_uploaded'), data.reboot ? 'warn' : 'ok');
         await loadConfig();
         if (data.reboot) {
-          setTimeout(function() { setMsg('Rebooting...', 'warn'); }, 400);
+          setTimeout(function() { setMsg(t('msg_rebooting'), 'warn'); }, 400);
         }
       } catch (e) {
-        setMsg('Connection error', 'err');
+        setMsg(t('msg_conn_error'), 'err');
       }
     }
     async function saveConfig(reboot) {
       var params = new URLSearchParams();
+      params.set('ui_lang', document.getElementById('ui-lang').value);
       params.set('hostname', document.getElementById('hostname').value);
       params.set('ota_hostname', document.getElementById('hostname').value);
       params.set('web_password', document.getElementById('web-pass').value);
@@ -760,33 +793,47 @@ static void handleConfigPage() {
         var res = await fetch('/api/config', { method: 'POST', body: params });
         var data = await res.json();
         if (!res.ok) {
-          setMsg(data.error || 'Save failed', 'err');
+          setMsg(data.error || t('msg_save_failed'), 'err');
           return;
         }
-        setMsg(data.message || 'Saved', data.reboot ? 'warn' : 'ok');
         if (data.reboot) {
-          setTimeout(function() { setMsg('Rebooting...', 'warn'); }, 400);
+          setMsg(t('msg_saved_reboot'), 'warn');
+          setTimeout(function() { setMsg(t('msg_rebooting'), 'warn'); }, 400);
+        } else if (data.message && data.message.indexOf('Reboot recommended') >= 0) {
+          setMsg(t('msg_saved_reboot_hint'), 'ok');
+        } else {
+          setMsg(t('msg_saved'), 'ok');
         }
       } catch (e) {
-        setMsg('Connection error', 'err');
+        setMsg(t('msg_conn_error'), 'err');
       }
     }
     async function rebootDevice() {
-      setMsg('Rebooting...', 'warn');
+      setMsg(t('msg_rebooting'), 'warn');
       await fetch('/api/reboot', { method: 'POST' });
     }
     async function factoryReset() {
-      if (!confirm('Are you sure? This erases all saved settings and reboots the device.')) {
+      if (!confirm(t('msg_factory_confirm'))) {
         return;
       }
-      setMsg('Factory reset...', 'warn');
+      setMsg(t('msg_factory_reset'), 'warn');
       try {
         await fetch('/api/factory-reset', { method: 'POST' });
       } catch (e) {
-        setMsg('Device rebooting', 'warn');
+        setMsg(t('msg_device_rebooting'), 'warn');
       }
     }
     document.getElementById('enable-dmx-input').addEventListener('change', syncPort2Options);
+    document.getElementById('ui-lang').addEventListener('change', function() {
+      setLangFromPref(parseInt(this.value, 10), true);
+    });
+    document.getElementById('hostname').addEventListener('input', function() {
+      var host = this.value || 'hostname';
+      document.getElementById('ap-hint-ssid').textContent = host + '-setup';
+      document.getElementById('mdns-hint').textContent = 'http://' + host + '.local';
+      document.title = host + ' · ' + t('page_title');
+    });
+    setLangFromPref(0, true);
     loadConfig();
   </script>
   )page"));
@@ -991,6 +1038,15 @@ static void handleConfigPost() {
 
   if (server.hasArg("artnet_debug_on_change")) {
     cfg.artnetDebugOnChange = server.arg("artnet_debug_on_change").toInt() != 0;
+  }
+
+  if (server.hasArg("ui_lang")) {
+    int lang = server.arg("ui_lang").toInt();
+    if (lang < UI_LANG_AUTO || lang > UI_LANG_DE) {
+      server.send(400, "application/json", "{\"error\":\"ui_lang out of range\"}");
+      return;
+    }
+    cfg.uiLang = (uint8_t)lang;
   }
 
   saveConfigToNvs();
