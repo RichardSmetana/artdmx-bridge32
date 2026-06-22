@@ -19,13 +19,13 @@
   <a href="manual-de.pdf">Handbuch (DE)</a>
 </p>
 
+Sources: `docs/manual.html` (English) · `docs/manual-de.html` (German). Regenerate PDFs: `docs/generate_manual_pdf.ps1` and `docs/generate_manual-de_pdf.ps1` (requires [wkhtmltopdf](https://wkhtmltopdf.org/)).
+
 ---
 
 ESP32 Art-Net to DMX512 bridge for Arduino IDE projects. It receives DMX data over WiFi, drives one or two RS-485 DMX outputs, and can optionally use a wired DMX input as fallback when Art-Net traffic is idle.
 
 Runtime settings are stored in NVS flash and can be edited through the built-in web interface.
-
-Sources: `docs/manual.html` (English) · `docs/manual-de.html` (German)
 
 > [!NOTE]
 > This project is inspired by [Connotron DMX Gateway](https://github.com/chaosloth/Connotron_DMX_Gateway) by [Christopher Connolly](https://github.com/chaosloth). `artdmx-bridge32` is a separate rewrite with NVS-backed configuration, a modular codebase, dual DMX output support, traffic indicators, a web dashboard, DMX test mode, configuration backup/restore, and a dual-core FreeRTOS task layout.

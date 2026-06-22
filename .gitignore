@@ -23,8 +23,6 @@ build/
 manual-new.pdf
 manual-01.pdf
 docs/extract_logo.ps1
-docs/generate_manual-de_pdf.ps1
-docs/generate_manual_pdf.ps1
 
 # --- Unused duplicate assets ---
 data/
